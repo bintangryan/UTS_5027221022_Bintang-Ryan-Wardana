@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+// Definisi pesan untuk transaksi
+message Transaction {
+  enum TransactionType {
+    PEMASUKAN = 0;
+    PENGELUARAN = 1;
+  }
+  
+  string id = 1;
+  TransactionType type = 2;
+  float amount = 3;
+  string date = 4;  // Format: mm/dd/yy
+  string description = 5;
+}
+
+// Pesan permintaan untuk menambahkan transaksi
+message AddTransactionRequest {
+  Transaction transaction = 1;
+}
+
+// Pesan respons untuk menambahkan transaksi
+message AddTransactionResponse {
+  Transaction transaction = 1;
+}
+
+// Pesan permintaan untuk mendapatkan transaksi berdasarkan jenisnya
+message GetTransactionsByTypeRequest {
+  Transaction.TransactionType type = 1;
+}
+
+// Pesan respons yang berisi transaksi berdasarkan jenisnya
+message GetTransactionsByTypeResponse {
+  repeated Transaction transactions = 1;
+}
+
+// Pesan permintaan untuk mengupdate transaksi
+message UpdateTransactionRequest {
+  string id = 1;
+  Transaction transaction = 2;
+}
+
+// Pesan respons untuk mengupdate transaksi
+message UpdateTransactionResponse {
+  Transaction transaction = 1;
+}
+
+// Pesan permintaan untuk menghapus transaksi
+message DeleteTransactionRequest {
+  string id = 1;
+}
+
+// Pesan respons untuk menghapus transaksi
+message DeleteTransactionResponse {
+  string message = 1;
+}
+
+// Definisi layanan untuk manajemen transaksi
+service TransactionService {
+  rpc AddTransaction(AddTransactionRequest) returns (AddTransactionResponse);
+  rpc GetTransactionsByType(GetTransactionsByTypeRequest) returns (GetTransactionsByTypeResponse);
+  rpc UpdateTransaction(UpdateTransactionRequest) returns (UpdateTransactionResponse);
+  rpc DeleteTransaction(DeleteTransactionRequest) returns (DeleteTransactionResponse);
+}
